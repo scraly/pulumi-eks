@@ -1,8 +1,13 @@
 {
     "name": "example-storage-classes",
     "devDependencies": {
+<<<<<<< HEAD
         "@types/node": "latest",
         "typescript": "^3.0.0"
+=======
+        "typescript": "^4.0.0",
+        "@types/node": "latest"
+>>>>>>> mnlumi/awsv6
     },
     "dependencies": {
         "@pulumi/eks": "latest",
