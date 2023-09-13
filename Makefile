@@ -1,6 +1,6 @@
 PROJECT_NAME := Pulumi Amazon Web Services (AWS) EKS Components
 
-VERSION         := $(shell pulumictl get version --is-prerelease)
+VERSION         := $(shell pulumictl get version)
 TESTPARALLELISM := 12
 
 PACK            := eks
@@ -27,7 +27,7 @@ schema::
 
 provider:: bin/${PROVIDER}
 
-build_nodejs:: VERSION := $(shell pulumictl get version --language javascript --is-prerelease)
+build_nodejs:: VERSION := $(shell pulumictl get version --language javascript)
 build_nodejs::
 	rm -rf nodejs/eks/bin/*
 	cd nodejs/eks && \
@@ -44,7 +44,7 @@ bin/pulumi-java-gen::
 	mkdir -p bin/
 	pulumictl download-binary -n pulumi-language-java -v $(JAVA_GEN_VERSION) -r pulumi/pulumi-java
 
-build_java:: PACKAGE_VERSION := $(shell pulumictl get version --language generic --is-prerelease)
+build_java:: PACKAGE_VERSION := $(shell pulumictl get version --language generic)
 build_java:: bin/pulumi-java-gen schema
 	rm -rf sdk/java
 	$(WORKING_DIR)/bin/$(JAVA_GEN) generate --schema provider/cmd/$(PROVIDER)/schema.json --out sdk/java --build gradle-nexus
@@ -52,7 +52,7 @@ build_java:: bin/pulumi-java-gen schema
 		echo "module fake_java_module // Exclude this directory from Go tools\n\ngo 1.17" > go.mod && \
 		gradle --console=plain build
 
-build_python:: PYPI_VERSION := $(shell pulumictl get version --language python --is-prerelease)
+build_python:: PYPI_VERSION := $(shell pulumictl get version --language python)
 build_python:: schema
 	rm -rf sdk/python
 	cd provider/cmd/$(CODEGEN) && go run main.go python ../../../sdk/python ../$(PROVIDER)/schema.json $(VERSION)
@@ -65,12 +65,12 @@ build_python:: schema
 		rm ./bin/setup.py.bak && \
 		cd ./bin && python3 setup.py build sdist
 
-build_go:: VERSION := $(shell pulumictl get version --language generic --is-prerelease)
+build_go:: VERSION := $(shell pulumictl get version --language generic)
 build_go:: schema
 	rm -rf sdk/go
 	cd provider/cmd/$(CODEGEN) && go run main.go go ../../../sdk/go ../$(PROVIDER)/schema.json $(VERSION)
 
-build_dotnet:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet --is-prerelease)
+build_dotnet:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
 build_dotnet:: schema
 	rm -rf sdk/dotnet
 	cd provider/cmd/$(CODEGEN) && go run main.go dotnet ../../../sdk/dotnet ../$(PROVIDER)/schema.json $(VERSION)
